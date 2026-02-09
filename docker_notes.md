@@ -162,7 +162,7 @@ Note that instead of executing the commands from the host system using `dexec` y
 ```bash
 docker exec -it mc-tutorial bash
 ```
-and type all the commands in the tutorial directly in the terminal inside the container without `dexec`.
+you can execute them in the container without ever needing `dexec`.
 
 ## Running Python with the `mc-tutorial` container 
 
