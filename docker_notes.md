@@ -110,11 +110,11 @@ You can mount a directory on the Host system in the container at the point of in
    ```
    It should return
    ```
-   OS/Architecture: linux/amd64
+   linux/amd64
    ``` 
    on Linux, Windows and older Mac machines, and
    ```
-   OS/Architecture: linux/arm64
+   linux/arm64
    ```
    on Macs with M chipset.
 
