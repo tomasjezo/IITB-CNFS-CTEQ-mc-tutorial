@@ -10,7 +10,7 @@ Let us start with a very simple example. Our goal is to generate some events, in
 ### Example 1: First $l^+l^-$ event
 Let us start by generating some events with opposite-charge lepton pairs using `Pythia`'s `Python` interface. 
 
-_This example includes a few `Python` code snippets; refer to the Appendix if you are unsure how to run them._
+_This example includes a few `Python` code snippets; refer to the [docker_notes.md](docker_notes.md) if you are unsure how to run them._
 
 ```python
 # This is Python
