@@ -176,7 +176,7 @@ you can execute them in the container without ever needing `dexec`.
    ```
    dexec python <fname>.py
    ``` 
-   The `-it` flag is not necessary, but won't hurt. 
+   The `-it` flag embedded into the alias is not necessary, but it won't hurt. 
 
 ## Compiling `Pythia8` programs with the `mc-tutorial` container 
 
