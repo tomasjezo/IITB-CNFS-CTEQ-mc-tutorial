@@ -82,8 +82,8 @@ Here we describe our recommended way of using `Docker`.
   `-it` flag is essential, links your terminal to the terminal in the container (`i` interactive, `t` attach pseudo terminal), otherwise the command executes and returns
 
 ## Warning: Potential data loss!
-Every time you execute `docker run` a container is created from an image, if you make any modifications to it and delete the container, all your modifications will be lost. In fact, most `Docker` tutorials suggest running the `run` command with the `--rm` flag which executes the container and deletes it as soon as it finished its task. This is not suitable in our tutorial. 
-If you want to preserve modifications, you need to keep it alive. Or turn container back to an image with `docker commit`.
+Every time you execute `docker run` a container is created from an image, if you make any modifications to the container these modifications are not automatically transferred to the image. So if you delete the container, all your modifications will be lost. Actually, many `Docker` tutorials suggest executing the `run` command with the `--rm` flag which instantiates the container, runs the dedicated task and deletes it as soon as it is finished. I do not recommend to use the `--rm` flag in this tutorial, unless you know what you are doing. 
+If you want to preserve modifications, you need to keep it alive. Or turn the container back to an image with the `docker commit` command.
 
 ## Access data from the Host
 You can mount a directory on the Host system in the container at the point of instantiation:
