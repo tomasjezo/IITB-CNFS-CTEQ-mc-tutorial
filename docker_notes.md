@@ -158,11 +158,11 @@ You can mount a directory on the Host system in the container at the point of in
    ```
    This is how we will use the container throughout the tutorial.
 
-Note that you can also simply "attach" the container with
+Note that instead of executing the commands from the host system using `dexec` you can also just "attach" the container with
 ```bash
 docker exec -it mc-tutorial bash
 ```
-And type all the commands in the tutorial directly in its terminal without `dexec`.
+and type all the commands in the tutorial directly in the terminal inside the container without `dexec`.
 
 ## Running Python with the `mc-tutorial` container 
 
