@@ -5,5 +5,5 @@ The purpose of this tutorial is to introduce essential tools for making predicti
 ## Session 1 - Monday, 09.02.2026
 
 We opened with a compact introduction to the basic components of MC event generators (see the slides). We then briefly explained the idea behind the essential technical prerequisite: `Docker`. 
-Throughout the whole tutorial, `Docker` containers provide all the required software, which would otherwise be challenging and time-consuming to install on your personal host systems. 
-Thus it is essential that we know how to operate them and so we continue with an hands-on introduction on how to use them: [docker_notes.md](docker_notes.md).
+Throughout the tutorial, `Docker` containers provide all the required software, which would otherwise be challenging and time-consuming to install on your own host systems. 
+It is therefore essential that everyone is familiar with how to operate them. We continue with a hands-on introduction to using `Docker`: [docker_note.md](docker_notes.md).
