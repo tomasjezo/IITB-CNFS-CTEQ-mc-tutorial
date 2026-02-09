@@ -1,4 +1,4 @@
-# Session 1 Examples
+# Session 2
 
 We will start by generating events with `Pythia8`, and analysing them and comparing the results to experimental data using `Rivet3`. We will then improve our predictions by upgrading the hard scattering component with the help of `MG5_aMC@NLO`. We will go through the material together; the examples will be discussed first and then demonstrated. You're expected to try the examples right away, but don't worry if you fall behind. We've allocated plenty of time for everyone to work through the exercises in tomorrow's session.
 
