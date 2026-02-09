@@ -204,7 +204,7 @@ The results stored in the `.yoda` file can be plotted using the following comman
 # This is shell
 
 # Do the plots
-dexec rivet-mkhtml --err Rivet.yoda
+dexec rivet-mkhtml-tex --err Rivet.yoda
 ```
 This command generates a `rivet-plots` directory containing all the plots, along with a simple HTML website that compiles them in `index.html`. You can open this file in your favourite browser. The `--err` switch switches on the plotting of the MC errorbars (which is very invaluable for samples with low stats). 
 
@@ -220,7 +220,7 @@ Here’s what you should see:
    # This is shell
 
    # Do the plots
-   dexec rivet-mkhtml Rivet.yoda:"LineColor=blue:LineWidth=2:Label=Pythia8"
+   dexec rivet-mkhtml-tex Rivet.yoda:"LineColor=blue:LineWidth=2:Label=Pythia8"
    ```
    For more details, refer to the [`plotting.md`](https://gitlab.com/hepcedar/rivet/-/blob/rivet-3.1.8/doc/tutorials/plotting.md) file from the [`Rivet` tutorials directory](https://gitlab.com/hepcedar/rivet/-/blob/rivet-3.1.8/doc/tutorials).
 
@@ -229,7 +229,7 @@ Here’s what you should see:
    # This is shell
 
    # Do the plots
-   dexec rivet-mkhtml -c plot.conf Rivet.yoda
+   dexec rivet-mkhtml-tex -c plot.conf Rivet.yoda
    ```
    In the example below we adjust the ratio plot $y$-axis limits using the `plot.conf` file:
    ```
@@ -240,7 +240,7 @@ Here’s what you should see:
    ```
    More information is available in the [`makeplots.md`](https://gitlab.com/hepcedar/rivet/-/blob/rivet-3.1.8/doc/tutorials/makeplots.md) file from the [`Rivet` tutorials directory](https://gitlab.com/hepcedar/rivet/-/blob/rivet-3.1.8/doc/tutorials).
 
-3. __Using Matplotlib for Plotting__: `Rivet` also supports plotting with `matplotlib` in `Python` using the `rivet-mkhtml-mpl` command, see [here](https://gitlab.com/hepcedar/rivet/-/blob/f12ca0cdb2163f29f725d6cbb4cee3a59c766fcb/doc/tutorials/customizeplots.md).
+3. __Using Matplotlib for Plotting__: `Rivet` also supports plotting with `matplotlib` in `Python` using the `rivet-mkhtml` command. This is however, not supported by the container.
 
 ---
 ### Example 5: Using FIFO pip in Examples 2 and 4
@@ -387,7 +387,7 @@ Once we analysed the event samples with `Rivet` we can compare the two prediciti
 # This is bash 
 
 # Plot two yoda files
-dexec rivet-mkhtml DY-MG5.yoda:"Title=MG5+Pythia8" DY.yoda:"Title=Pythia8" -c plot.conf
+dexec rivet-mkhtml-tex DY-MG5.yoda:"Title=MG5+Pythia8" DY.yoda:"Title=Pythia8" -c plot.conf
 ```
 Here `DY-MG5.yoda` and `DY.yoda` contain the results obtained by analysing `MG5_aMC@NLO+Pythia8` with the `rivet` program (see Example 4).
 
@@ -400,7 +400,7 @@ Like this, we disable all but the first weight:
 # This is bash
 
 # Plot two yoda files, select single weight
-dexec rivet-mkhtml --errs DY-MG5.yoda:"Title=MG5+Pythia8:Variations=none"  DY.yoda:"Title=Pythia8" -c plot.conf
+dexec rivet-mkhtml-tex --errs DY-MG5.yoda:"Title=MG5+Pythia8:Variations=none"  DY.yoda:"Title=Pythia8" -c plot.conf
 
 ```
 
@@ -409,7 +409,7 @@ And like this, we instruct `Rivet` to render an envelope of a selection of weigh
 # This is bash
 
 # Plot two yoda files, with a central curve and a scale variation band
-dexec rivet-mkhtml --errs DY-MG5.yoda:"Title=MG5+Pythia8:Variations=none:BandComponentEnv=1,6,11,16,25,30,35,40"  DY.yoda:"Title=Pythia8" -c plot.conf
+dexec rivet-mkhtml-tex --errs DY-MG5.yoda:"Title=MG5+Pythia8:Variations=none:BandComponentEnv=1,6,11,16,25,30,35,40"  DY.yoda:"Title=Pythia8" -c plot.conf
 ```
 
 Which weights to select (`1,6,...`) can be figured out by looking at the `.lhe` file:
