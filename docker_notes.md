@@ -164,7 +164,7 @@ docker exec -it mc-tutorial bash
 ```
 you can execute them in the container without ever needing `dexec`.
 
-## Running Python with the `mc-tutorial` container 
+## Running `Python` with the `mc-tutorial` container 
 
 - run `python` interpreter terminal
    ```
