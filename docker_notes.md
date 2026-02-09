@@ -104,7 +104,7 @@ You can mount a directory on the Host system in the container at the point of in
    docker pull tomasjezo/mc-tutorial-2026
    ```
 
-1a. [Optional] We check whether we the right architecture was downloaded.
+2. [Optional] We check whether we the right architecture was downloaded.
    ```bash
    docker image inspect tomasjezo/mc-tutorial-2026  --format '{{.Os}}/{{.Architecture}}'
    ```
@@ -118,7 +118,7 @@ You can mount a directory on the Host system in the container at the point of in
    ```
    on Macs with M chipset.
 
-2. Then we enter the directory we want to work in and create a container from the image
+3. Then we enter the directory we want to work in and create a container from the image
    ```bash
    docker run -itd -v ./:/home -w /home --name mc-tutorial tomasjezo/mc-tutorial-2026
    ``` 
@@ -135,7 +135,7 @@ You can mount a directory on the Host system in the container at the point of in
    <id>           <image_id>     "bash"    xy seconds ago   Up xy seconds                         mc-tutorial
    ```
 
-3. Finally, we can execute any command in the container as follows
+4. Finally, we can execute any command in the container as follows
    ```bash
    docker exec mc-tutorial <COMMAND>
    ```
@@ -144,7 +144,7 @@ You can mount a directory on the Host system in the container at the point of in
    docker exec -it mc-tutorial <COMMAND>
    ```
 
-4. Alternatively it may be useful to setup an `alias`, if available in your terminal:
+5. Alternatively it may be useful to setup an `alias`, if available in your terminal:
    ```bash
    alias dexec="docker exec -it mc-tutorial"
    ```
