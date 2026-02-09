@@ -1,6 +1,7 @@
 # Session 2
 
-We will start by generating events with `Pythia8`, and analysing them and comparing the results to experimental data using `Rivet`. We will then improve our predictions by upgrading the hard scattering component with the help of `MG5_aMC@NLO`. We will go through the material together; the examples will be discussed first and then demonstrated. You're expected to try the examples right away, but don't worry if you fall behind. We've allocated plenty of time for everyone to work through the exercises in tomorrow's session.
+We begin by generating events with `Pythia8`, analysing them, and comparing its predictions to experimental data using `Rivet`. We then improve our predictions by upgrading the hard scattering component with the help of `MG5_aMC@NLO`. We will go through the material together; the examples will be discussed and demonstrated at the same time. You are encouraged to try the examples immediately, but don't worry if you fall behind. You can always finish all exercises at your own pace after session.
+
 
 ## Event generation with `Pythia8`
 Let us start with a very simple example. Our goal is to generate some events, inspect them, and save them in a file on hard-drive.
