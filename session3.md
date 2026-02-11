@@ -188,6 +188,251 @@ This is what the plot looks like with a scale variation band:
 
 <img alt="A screenshot of a single Rivet plot with scale variation band" src="pics/rivetScreenshot3.png" width="400">
 
+---
+
+## NLO+PS matching with `POWHEG BOX`
+
+`POWHEG BOX` is a general-purpose computational framework used in high-energy physics to generate events with next-to-leading-order (NLO) accuracy. It is an implementation of the POWHEG (Positive Weight Hardest Emission Generator) method, which was developed to improve the accuracy of event simulations by combining NLO perturbative QCD calculations with parton shower simulations.
+
+The `POWHEG BOX` code is structured differently from other Monte Carlo generators available on the market. Typically, one downloads the `POWHEG BOX` directory using `git`. This directory only contains the _core subroutines_ needed for event generation with the POWHEG methods, but no processes. It cannot be built on its own. The process directory can also be downloaded using `git` and must be placed into the `POWHEG BOX` directory, and only then can it be built.
+
+In the `mc-tutorial` container `POWHEG BOX V2` is installed in the `/root/POWHEG-BOX-V2/` directory.
+
+---
+
+### Example 10: `POWHEG BOX V2` directory structure and list of processes
+
+For clarity, let us inspect the directory structure of `POWHEG BOX V2`. The command
+```bash
+# This is shell
+
+# list a directory in the container
+docker exec mc-tutorial-powheg ls /root/POWHEG-BOX-V2
+```
+prints out the following output
+```
+Bornzerodamp.f         checkmomzero.f         integrator.f     newunit.f                        pwhg_bookhist.f            sigcollsoft.f
+Check_LesHouches.f     decidemerging.f        lhapdf6if.f      opencount.f                      pwhg_init.f                sigreal.f
+Docs                   fastjetktwrap.cc       lhapdf6ifcc.cc   pdfcalls-hook1.h                 pwhg_io_interface.f        sigremnants.f
+GoSamStuff             fastjetsisconewrap.cc  lhapdfif.f       pdfcalls.f                       pwhg_main.f                sigsoftvirt.f
+Herwig7.1              find_regions.f         lhef_analysis.f  pdfdata                          pwhgreweight.f             sigvirtual.f
+LesHouches.f           findflavperm.f         lhefread.f       pdfdummies.f                     pythia-6.4.21.f            svnversion
+LesHouchesreg.f        gen_Born_phsp.f        lhefwrite.f      powheginput.f                    pythia-6.4.25.f            test-integrator
+MadGraphStuff          gen_index.f            loadstorenlo.f   progress                         pythia.f                   test_Sudakov.f
+MiNNLOStuff            gen_radiation.f        main-HERWIG.f    pt2maxreg.f                      random.f                   test_pwhg_book.f
+Scripts                gen_real_phsp.f        main-PYTHIA.f    pwhg_analysis-dummy.f            reshufflemoms.f            ubprojections.f
+Z                      herwig.f               maxrat.f         pwhg_analysis_driver.f           rwl_setup_param_weights.f  utils.f
+bbinit.f               herwig6510.f           mergedata.f      pwhg_bookhist-multi-extra-new.f  rwl_weightlists.f          validflav.f
+boostrot.f             hvq                    mint_upb.f       pwhg_bookhist-multi-extra.f      setlocalscales.f           zlibdummy.c
+bra_ket_subroutines.f  hvqpdfpho.f            mlmpdfif.f       pwhg_bookhist-multi-new.f        setstrongcoupl.f
+btilde.f               include                multi_plot.f     pwhg_bookhist-multi.f            sigborn.f
+cernroutines.f         init_phys.f            mwarn.f          pwhg_bookhist-new.f              sigcollremn.f
+```
+Here, the directories `Z` and `hvq` are the two processes that I downloaded and built, corresponding to the NC Drell-Yan production ($l^+l^-$) and the top pair production ($t \bar{t}$) processes.
+
+The full list of processes is available on the `POWHEG BOX` [website](https://powhegbox.mib.infn.it/). The names of the process directories are not unambiguous, so it's always a good idea to read through the corresponding publication.
+
+---
+
+### Example 11: Generating $l^+l-$ events at NLO in `POWHEG BOX`
+The main program for each process is called `pwhg_main`. I have appended both process directories into `PATH` and renamed them to `pwhg_main-Z` and `pwhg_main-hvq`. In this example, we will only use `pwhg_main-Z`.
+
+The program looks for the run card `powheg.input` in the current working directory and generates a lot of files during its run. Let us first create a dedicated run directory:
+```bash
+# This is shell
+
+# create a run directory 
+mkdir POWHEG_l+l-
+```
+Here is a minimal `powheg.input` run card for the `POWHEG-BOX/Z` process:
+```
+! This is powheg.input
+
+! Z production parameter
+vdecaymode 1      !(1:leptonic decay, 2:muonic decay, 3: tauonic decay,...)
+Zmass 91.1876d0
+Zwidth 2.4952d0
+mass_low 60        ! lower limit for dilepton mass
+mass_high 120      ! upper limit for dilepton mass
+
+numevts 10000    ! number of events to be generated
+ih1   1           ! hadron 1 (1 for protons, -1 for antiprotons)
+ih2   1           ! hadron 2 (1 for protons, -1 for antiprotons)
+! Ignored when using LHAPDF
+ndns1 131         ! pdf set for hadron 1 (mlm numbering)
+ndns2 131         ! pdf set for hadron 2 (mlm numbering)
+ebeam1 6500d0    ! energy of beam 1
+ebeam2 6500d0    ! energy of beam 2
+! To be set when using LHAPDF
+lhans1 93000      ! pdf set for hadron 1 (LHA numbering)
+lhans2 93000      ! pdf set for hadron 2 (LHA numbering)
+
+! Parameters to allow or not the use of stored data
+use-old-grid    1 ! if 1 use old grid if file pwggrids.dat is present (<> 1 regenerate)
+use-old-ubound  1 ! if 1 use norm of upper bounding function stored in pwgubound.dat, if present; <> 1 regenerate
+
+ncall1 100000   ! number of calls for initializing the integration grid
+itmx1    5     ! number of iterations for initializing the integration grid
+ncall2 100000   ! number of calls for computing the integral and finding upper bound
+itmx2    5     ! number of iterations for computing the integral and finding upper bound
+foldcsi   1    ! number of folds on csi integration
+foldy     1    ! number of folds on  y  integration
+foldphi   1    ! number of folds on phi integration
+nubound 20000  ! number of bbarra calls to setup norm of upper bounding function
+icsimax  1     ! <= 100, number of csi subdivision when computing the upper bounds
+iymax    1     ! <= 100, number of y subdivision when computing the upper bounds
+xupbound 2d0   ! increase upper bound for radiation generation
+
+! OPTIONAL PARAMETERS
+#iseed    12345    ! initialize random number sequence
+#rand1     -1      ! initialize random number sequence
+#rand2     -1      ! initialize random number sequence
+
+#runningscale 0    ! default is 1, true, central scale equal to Z/gamma virtuality, 0 equal to M_Z
+```
+Make sure you create the `powheg.input` file in the `POWHG_l+l-` directory and copy the above run card into it. The `mc-tutorial-powheg` image also contains the `nano` editor. Here is how you could use it for this task:
+```bash
+# This is shell
+
+# launch nano
+docker exec -it mc-tutorial-powheg nano POWHEG_l+l-/powheg.input
+```
+There, you can simply copy&paste the run card. Then press `ctrl+O` to "Write Out", and you'll be prompted to confirm the file name. After that, you can exit by pressing `ctrl+X`.
+
+`POWHEG BOX` is launched as follows. 
+```bash
+# This is shell
+
+# run pwhg_main for the Z process
+docker exec -w /home/POWHEG_l+l- mc-tutorial-powheg pwhg_main-Z
+```
+Here, the flag `-w /home/POWHEG_l+l-` indicates that we want to launch the command in the `/home/POWHEG_l+l-` directory. This is necessary since the default directory upon launching `docker exec` is `/home`.
+
+The program will start calculating the differential cross sections and will eventually generate events. The entire process, with a goal 10k events, takes about 1m on my laptop. The total cross section is reported in the file `pwgstat.dat`:
+```bash
+# This is shell
+
+# print the content of the pwg-stat.dat file
+docker exec -w /home/POWHEG_l+l- mc-tutorial-powheg cat pwg-stat.dat
+```
+prints
+```
+ btilde pos.   weights:   2072.3105785274079       +-  0.86248316776047951     
+ btilde |neg.| weights:   18.714742955274048       +-  0.23162351550630880     
+ btilde Total (pos.-|neg.|):   2053.5958355721264       +-  0.94373861641199874     
+  total (btilde+remnants) cross section in pb   2053.5958355721264      +-  0.94373861641199874     
+  negative weight fraction:   8.9500317203256366E-003
+```
+We see that the obtained precision on the total cross section is about 0.5 permil. If we multiply the number of calls in the `ncall2` setting by a factor of 25, we should approach a precision of 0.1 permil (using the $1/\sqrt{N}$ law of scaling of the MC integration error). This file should always be inspected to ensure that the precision of the differential cross section used for generating the events is appropriate.
+
+We also note that the fraction of negative weights is under 1%, which is excellent.
+
+The generated events are stored in the `pwgevents.lhe` file. By default, this file is not compressed on-the-fly, but compression can be enabled to save HDD space by including the following line in the `powheg.input` file:
+```
+! This is powheg.input
+compress_lhe 1 ! enables compression of .lhe files on-the-fly
+```
+However, note that `POWHEG BOX` does not append `.gz` to compressed files and expects users and other programs to determine whether the file is compressed themselves.
+
+The program is set up to run at next-to-leading order (NLO) accuracy by default. If you want the events to be at leading order (LO), you must add the following lines to the `powheg.input` file:
+```
+! This is powheg.input
+bornonly 1 ! calculate differential cross sections at LO
+LOevents 1 ! generate events without attaching an extra emission
+```
+
+The calculation of the differential cross section and upper bounds can be time-consuming (potentially taking days on hundreds of cores for complicated processes). To save time, the program allows you to reuse the results for the _grids_ (cross sections) and _ubounds_ (upper bounds). 
+```
+use-old-grid    1 ! if 1 use old grid if file pwggrids.dat is present (<> 1 regenerate)
+use-old-ubound  1 ! if 1 use norm of upper bounding function stored in pwgubound.dat, if present; <> 1 regenerate
+```
+These settings were already enabled above, and if the results do not yet exist, they will be calculated anew.
+They have two important consequences:
+1. If you want to add more events, you can start the run in an existing run directory with the `pwgevents.lhe` file moved away. Such a directory is often referred to as a _grid pack_.
+2. If you change physics inputs, you must rerun in a _clean_ run directory or with these two settings disabled. The program will not check the consistency of the settings between the `powheg.input` and existing grids, so you may get inconsistent results. 
+---
+
+### Example 12: Showering `POWHEG BOX` events with `Pythia8`
+`POWHEG BOX` also generated events in the `.lhe` format, so to shower them we can reuse the program from Example 8 in [Session 1](session1_examples.md)
+```c++
+// This is C++
+
+#include "Pythia8/Pythia.h"
+#include "Pythia8Plugins/HepMC3.h"
+#include "Pythia8Plugins/PowhegHooks.h"
+using namespace Pythia8;
+
+int main() {
+
+  // Interface for conversion from Pythia8::Event to HepMC event.
+  // Specify file where HepMC events will be stored.
+  Pythia8ToHepMC toHepMC("DY-POWHEG.hepmc");
+
+  // LHE event loader.
+  Pythia pythia;
+  // Set up UserHook for showering POWHEG events
+  shared_ptr<PowhegHooks> powhegHooks;
+  powhegHooks = make_shared<PowhegHooks>();
+  pythia.setUserHooksPtr((UserHooksPtr)powhegHooks);
+  pythia.readString("POWHEG:Veto = 1"); // Switch the hook on
+  pythia.readString("Beams:frameType = 4"); // Switch on loading of LHE files
+  pythia.readString("Beams:LHEF = POWHEG_l+l-/pwgevents.lhe"); // Set the LHE path and filename
+  pythia.readString("TimeShower:ptMaxMatch = 2"); // Unrestricted FSR
+  pythia.readString("SpaceShower:ptMaxMatch = 2"); // Unrestricted ISR
+
+  // If Pythia fails to initialize, exit with error.
+  if (!pythia.init()) return 1;
+
+  // Begin event loop. Shower event. Skip if error.
+  while (!pythia.info.atEndOfFile()) {
+    if (!pythia.next()) continue;
+
+    // Construct new empty HepMC event, fill it and write it out.
+    toHepMC.writeNextEvent( pythia );
+
+  // End of event loop. Statistics.
+  }
+  pythia.stat();
+
+  // Done.
+  return 0;
+}
+```
+I save the content the code into `mymain131-powheg.cc`. Note that you need to compile it with the `Docker` container from the previous session:
+```bash
+# This is shell
+
+# build the mymain131-powheg program
+docker exec mc-tutorial make mymain131-powheg
+```
+Note here the use of `mc-tutorial` instead of `mc-tutorial-powheg`. As before, you will need to add the `mymain131-powheg` target to the `Makefile`.
+
+Besides two trivial differences compared to Example 8:
+
+1. The name of the output file is `DY-POWHEG.hepmc3`.
+2. The name and path of the input file is `POWHEG_l+l-/pwgevents.lhe`.
+
+There are two very important differences:
+
+1. **Shower Starting Scale**: Instead of letting `Pythia8` read the shower starting scale `SCALUP` from the `LHE` file, we let the shower evolution start at the highest available scale by setting `ptMaxMatch = 2` instead of `ptMaxMatch = 1`.
+
+2. **Veto Emissions**: We configure the `PowhegHooks` plugin to veto any emissions that `Pythia8` tries to attach if they are harder than the emission already attached by POWHEG. 
+
+   ```c++
+   // This is C++
+
+   shared_ptr<PowhegHooks> powhegHooks;
+   powhegHooks = make_shared<PowhegHooks>();
+   pythia.setUserHooksPtr((UserHooksPtr)powhegHooks);
+   pythia.readString("POWHEG:Veto = 1"); // Switch the hook on
+   pythia.readString("TimeShower:ptMaxMatch = 2"); // Unrestricted FSR
+   pythia.readString("SpaceShower:ptMaxMatch = 2"); // Unrestricted ISR
+   ```
+
+Even though the `SCALUP` variable has been introduced to prevent double counting and with `ptMaxMatch = 1`, `Pythia8` emissions would not exceed it, there is a minor catch. The definition of the shower evolution scale in `Pythia8` does not perfectly align with the definition of the hardness scale of the hardest emission in POWHEG. 
+
+The `PowhegHooks` plugin addresses this issue. Although the numerical impact is often small, it can become significant for some processes.
+
 ## Appendix
 
 Here we provide more information on topics we may have assumed that you already knew including a couple of useful references. 
