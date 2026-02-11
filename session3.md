@@ -443,6 +443,9 @@ Here we provide more information on topics we may have assumed that you already 
 
 `MadGraph5_aMC@NLO` is the new version of both MadGraph5 and aMC@NLO that unifies the LO and NLO lines of development of automated tools within the MadGraph family. It therefore supersedes all the MadGraph5 1.5.x versions and all the beta versions of aMC@NLO. As such, the code allows one to simulate processes in virtually all configurations of interest, in particular for hadronic and e+e- colliders; starting from version 3.2.0, the latter include Initial State Radiation and beamstrahlung effects.
 
+### `POWHEG BOX` (excerpt from the [POWHEG BOX website](https://powhegbox.mib.infn.it))
+
+The POWHEG BOX is a general computer framework for implementing NLO calculations in shower Monte Carlo programs according to the POWHEG method. It is also a library, where previously included processes are made available to the users. It can be interfaced with all modern shower Monte Carlo programs that support the Les Houches Interface for User Generated Processes.
 
 ### `LHE` 
 
