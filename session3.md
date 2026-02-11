@@ -207,7 +207,7 @@ For clarity, let us inspect the directory structure of `POWHEG BOX V2`. The comm
 # This is shell
 
 # list a directory in the container
-docker exec mc-tutorial-powheg ls /root/POWHEG-BOX-V2
+dexec ls /root/POWHEG-BOX-V2
 ```
 prints out the following output
 ```
@@ -290,21 +290,14 @@ xupbound 2d0   ! increase upper bound for radiation generation
 
 #runningscale 0    ! default is 1, true, central scale equal to Z/gamma virtuality, 0 equal to M_Z
 ```
-Make sure you create the `powheg.input` file in the `POWHG_l+l-` directory and copy the above run card into it. The `mc-tutorial-powheg` image also contains the `nano` editor. Here is how you could use it for this task:
-```bash
-# This is shell
-
-# launch nano
-docker exec -it mc-tutorial-powheg nano POWHEG_l+l-/powheg.input
-```
-There, you can simply copy&paste the run card. Then press `ctrl+O` to "Write Out", and you'll be prompted to confirm the file name. After that, you can exit by pressing `ctrl+X`.
+Make sure you create the `powheg.input` file in the `POWHG_l+l-` directory and copy the above run card into it.
 
 `POWHEG BOX` is launched as follows. 
 ```bash
 # This is shell
 
 # run pwhg_main for the Z process
-docker exec -w /home/POWHEG_l+l- mc-tutorial-powheg pwhg_main-Z
+docker exec -w /home/POWHEG_l+l- mc-tutorial pwhg_main-Z
 ```
 Here, the flag `-w /home/POWHEG_l+l-` indicates that we want to launch the command in the `/home/POWHEG_l+l-` directory. This is necessary since the default directory upon launching `docker exec` is `/home`.
 
@@ -313,7 +306,7 @@ The program will start calculating the differential cross sections and will even
 # This is shell
 
 # print the content of the pwg-stat.dat file
-docker exec -w /home/POWHEG_l+l- mc-tutorial-powheg cat pwg-stat.dat
+docker exec -w /home/POWHEG_l+l- mc-tutorial cat pwg-stat.dat
 ```
 prints
 ```
@@ -403,13 +396,13 @@ I save the content the code into `mymain131-powheg.cc`. Note that you need to co
 # This is shell
 
 # build the mymain131-powheg program
-docker exec mc-tutorial make mymain131-powheg
+dexec make mymain131-powheg
 ```
-Note here the use of `mc-tutorial` instead of `mc-tutorial-powheg`. As before, you will need to add the `mymain131-powheg` target to the `Makefile`.
+As before, you will need to add the `mymain131-powheg` target to the `Makefile`.
 
 Besides two trivial differences compared to Example 8:
 
-1. The name of the output file is `DY-POWHEG.hepmc3`.
+1. The name of the output file is `DY-POWHEG.hepmc`.
 2. The name and path of the input file is `POWHEG_l+l-/pwgevents.lhe`.
 
 There are two very important differences:
